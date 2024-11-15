@@ -1,0 +1,112 @@
+Assembly:
+Follow the supplied instructions from the Cana Kit
+
+Power Up:
+Connect a USB mouse and keybord to the two USB ports on the right next to the Ethernet Connector.
+Connect the display to the Mini-HDMI port on the left next to the USB C power supply connector.
+Plug the Pi4 power supply cable into the USB C port.
+Plug in the Pi4 power supply to the AC outlet, the board will boot up..
+
+Follow the prompts on screen to install the Raspbin PI OS (full 32bit version)
+When you get to the the screen where you set up the Password you can keep the default or change it.  
+I recommend changing it just to be safe.  Wite it down as you will need it to connect to the file system via windows later.
+
+The installation will take you through setting up Wifi, so have the SSID and Security key handy.
+
+At some point you will be prompted to check for updates.  Select NO as this could take an hour or more and you gain nothing by doing so... (for our purposes)
+
+
+OS Up and Running:
+
+Install the NXP-LPC USB HID Driver, and SAMBA (filesystem sharing server)
+open a terminal (upper left on the menu bar) and issue the following commands:
+sudo apt install lpctools
+sudo apt-get install samba
+sudo smbpasswd -a pi (type in the pi user password you created during installation when prompted)
+
+Copy the /Howard Folder from your PC to a USB stick and insert it into an available USB port on the Pi4.
+Copy the /Howard Folder to /home on the Pi4.
+
+Navigate to the new /home/Howard folder.
+
+Edit the EZConfig.xml file and enter Med Manager's server address
+
+copy the following configuration files to their required locations.
+NOTE:  The SSID and Pasword are not needed here since they were set using the Pi4 GUI.
+  
+open a terminal (upper left on the menu bar) and run the install shell script.
+
+Issue the following command exactly as seen below:
+
+./install_hmpd_files.sh
+
+The shell script will issue the following commands:
+sudo cp hmed-hid.rules /etc/udev/rules.d 
+sudo cp openssl.cnf /etc/ssl
+sudo cp hmpd /usr/bin (** This is the application executable **)
+sudo cp hmpd.service /etc/systemd/system  (** This is the service config file that controls the application
+sudo cp smb.conf /etc/samba
+
+sudo systemctl restart smbd
+
+You should be able to access the /home folder tree from now on via Windows Explorer over the network.
+The first time will require pi user password.
+
+Connect the E2 Serial over USB cable to one of the USB ports on the left.
+Connect the USB cable from the TDI Power Supply to the other.
+
+Reboot the Pi4.
+
+After it is up:
+
+Verify the presence of the USB ports we need.
+Issue the following command in the terminal console:
+
+lsusb
+
+*** These are the two ports used by the application ***
+
+Bus 001 Device 007: ID 04d8:f55b Microchip Technology, Inc. 
+Bus 001 Device 006: ID 1fc9:0090 NXP Semiconductors 
+
+If they are present issue the following command to verify hmpd is running as a service:
+
+sudo systemctl status hmpd.service
+
+If you want to see the output from the hmpd application you must first stop the service:
+
+sudo systemctl stop hmpd.service
+
+Then issue the following command:
+
+/usr/bin/hmpd -v (for verbose console output)
+
+To run the hmpd application with no output
+
+/usr/bin/hmpd (for no console output)
+
+To restart hmpd as a service:
+
+sudo systemctl start hmpd.service
+
+
+
+***  Headless Access ***
+
+Issue the following commands to allow SSH access to the Pi4 from your PC or workstation:
+
+cd /boot		(change directory to the /boot folder)
+sudo touch ssh	(create an empty ssh file.  This will enable remote access features)
+sudo reboot		(reboot the Pi4 so ssh access can take effect)
+
+Once up and running, use an application such as putty to connect via a terminal program.
+Just type in the ip address of the Pi4, select ssh as the connection type and click Open.
+A terminal window will open with a login prompt.  enter the username (pi) in my case, and the password when prompted.
+
+From this terminal window you can issue commands just as if you are physically working on the Pi4 itself.
+
+
+
+
+
+

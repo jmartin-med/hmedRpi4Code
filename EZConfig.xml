@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Cart>
+  <CartConfig>
+    <SSID>Your SSID</SSID>
+    <SecurityKey>Your Password</SecurityKey>
+    <ServerIP>23.96.126.230</ServerIP>
+    <MedPort>1125</MedPort>
+    <PowerPort>2328</PowerPort>    
+    <CallHomeInterval>2</CallHomeInterval>
+    <CallPowerInterval>1</CallPowerInterval>
+  </CartConfig>
+</Cart>
